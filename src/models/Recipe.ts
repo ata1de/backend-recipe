@@ -13,7 +13,7 @@ interface RecipeAttributes {
   // authorId: number;
 }
 
-interface RecipeCreationAttributes extends Optional<RecipeAttributes, 'id'> {}
+export interface RecipeCreationAttributes extends Optional<RecipeAttributes, 'id'> {}
 
 class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> implements RecipeAttributes {
   public id!: number;

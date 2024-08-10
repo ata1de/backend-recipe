@@ -1,4 +1,5 @@
 import { Recipe } from "../models"
+import { RecipeCreationAttributes } from "../models/Recipe"
 
 const recipeService = {
     getByName: async(name: string) => {
@@ -22,7 +23,7 @@ const recipeService = {
         return recipes
     },
 
-    createRecipe: async(recipe: Recipe) => {
+    createRecipe: async(recipe: RecipeCreationAttributes) => {
         return await Recipe.create(recipe)
     },
 

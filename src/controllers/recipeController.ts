@@ -23,11 +23,11 @@ const recipeController = {
     },
 
     // GET /recipes/:category
-    show: async(req: Request, res: Response) => { 
-        const { name } = req.params
+    showByCategory: async(req: Request, res: Response) => { 
+        const { category } = req.params
 
         try {
-            const recipe = await recipeService.getByName(name)
+            const recipe = await recipeService.getByCategory(category)
 
             if (!recipe) {
                 return res.status(404).json({message: 'Recipe not find' })
@@ -41,5 +41,42 @@ const recipeController = {
         }
     },
 
+    // POST /recipes
+    create: async(req: Request, res: Response) => {
+        const {title, description, time,difficulty ,category, calories, imgUrl } = req.body
+
+        try {
+            const newRecipe = await recipeService.createRecipe({
+                title,
+                description,
+                time,
+                difficulty,
+                category,
+                calories,
+                imgUrl
+            })
+
+            return res.status(201).json(newRecipe)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({message: error.message})
+            }
+        }
+    },
+
+    // GET /recipes/newest
+    showTop5NewRecipes: async(req: Request, res: Response) => {
+        try {
+            const recipes = await recipeService.getTop5NewRecipes()
+
+            return res.status(200).json(recipes)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({message: error.message})
+            }
+        }
+    }
 
 }
+
+export default recipeController
