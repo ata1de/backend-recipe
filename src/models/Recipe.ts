@@ -9,6 +9,7 @@ interface RecipeAttributes {
   difficulty: string;
   category: string;
   calories: number;
+  imgUrl: string;
   // authorId: number;
 }
 
@@ -22,6 +23,7 @@ class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> implement
   public difficulty!: string;
   public category!: string;
   public calories!: number;
+  public imgUrl!: string;
   // public authorId!: number;
 }
 
@@ -53,6 +55,10 @@ Recipe.init({
   },
   calories: {
     type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  imgUrl: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   // authorId: {
