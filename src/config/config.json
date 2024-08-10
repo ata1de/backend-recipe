@@ -1,0 +1,15 @@
+{
+  "development": {
+    "typescript": true,
+    "storage": "./src/database/.sqlite",
+    "dialect": "sqlite"
+  },
+  "test": {
+    "storage": "./src/database/.sqlite",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "storage": "./src/database/.sqlite",
+    "dialect": "sqlite"
+  }
+}
