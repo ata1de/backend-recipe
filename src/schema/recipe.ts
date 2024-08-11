@@ -21,11 +21,17 @@ const recipeSchema = {
             calories: yup.number().required(),
             imgUrl: yup.string().url().required()
         })
+    },
+    getById: {
+        params: yup.object().shape({
+            id: yup.string().required()
+        })
     }
 }
 
 export default {
     getByName: recipeSchema.getByName,
     getByCategory: recipeSchema.getByCategory,
+    getById: recipeSchema.getById,
     create: recipeSchema.create
 };

@@ -3,7 +3,26 @@ import recipeService from "../services/recipeService"
 
 const recipeController = {
 
-    // GET /recipes/:name
+    // GET /recipes/:id
+    showById: async(req: Request, res: Response) => { 
+        const { id } = req.params
+
+        try {
+            const recipe = await recipeService.getDetails(id)
+
+            if (!recipe) {
+                return res.status(404).json({message: 'Recipe not find' })
+            } 
+
+            return res.status(200).json(recipe)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({message: error.message})
+            }
+        }
+    },
+
+    // GET /recipes/search/:name
     showByName: async(req: Request, res: Response) => { 
         const { name } = req.params
 
@@ -22,7 +41,7 @@ const recipeController = {
         }
     },
 
-    // GET /recipes/:category
+    // GET /recipes/category/:category
     showByCategory: async(req: Request, res: Response) => { 
         const { category } = req.params
 

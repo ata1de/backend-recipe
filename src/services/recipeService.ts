@@ -2,7 +2,7 @@ import { Op } from "sequelize"
 import { Recipe, RecipeCreationAttributes } from "../models/Recipe"
 
 const recipeService = {
-    getDetails: async(id: number) => {
+    getDetails: async(id: string) => {
         return await Recipe.findByPk(id)
     },
 
