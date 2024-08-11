@@ -19,7 +19,7 @@ const recipeSchema = {
             difficulty: yup.string().required(),
             category: yup.string().required(),
             calories: yup.number().required(),
-            imgUrl: yup.string().required()
+            imgUrl: yup.string().url().required()
         })
     }
 }
