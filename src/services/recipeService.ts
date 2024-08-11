@@ -1,37 +1,56 @@
-import { Recipe } from "../models"
-import { RecipeCreationAttributes } from "../models/Recipe"
+import { Op } from "sequelize"
+import { Recipe, RecipeCreationAttributes } from "../models/Recipe"
 
 const recipeService = {
+    getDetails: async(id: string) => {
+        return await Recipe.findByPk(id)
+    },
+
     getByName: async(name: string) => {
-        const recipe = await Recipe.findOne({
-            attributes: ['title', 'category', 'calories'],
+        const lowerCaseName = name.toLowerCase()
+
+        const { count, rows} = await Recipe.findAndCountAll({
+            attributes: ['title', 'category', 'imgUrl'],
             where: {
-                title: name
+                title: {
+                    [Op.like]: `%${lowerCaseName}%`
+                }
             }
         })
 
-        return recipe
+        return {
+            recipes: count,
+            totalRecipes: rows
+        }
     },
 
     getByCategory: async(category: string) => {
-        const recipes = await Recipe.findAll({
+        const {count, rows} = await Recipe.findAndCountAll({
+            attributes: ['title', 'category', 'imgUrl'],
             where: {
                 category
             }
         })
 
-        return recipes
+        return {
+            recipes: count,
+            totalRecipes: rows
+        }
     },
 
-    createRecipe: async(recipe: RecipeCreationAttributes) => {
-        return await Recipe.create(recipe)
+    createRecipe: async(recipeProp: RecipeCreationAttributes) => {
+        return await Recipe.create(recipeProp)
     },
 
     getTop5NewRecipes: async() => {
-        return await Recipe.findAll({
+        const NewestRecipes = await Recipe.findAll({
             limit: 5,
             order: [['createdAt', 'DESC']]
         })
+
+        return {
+            newest: NewestRecipes
+        }
     }
 
 }

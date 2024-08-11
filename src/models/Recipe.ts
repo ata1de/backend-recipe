@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../database/index'; // Assumindo que você tenha um modelo Author já definido
 
 interface RecipeAttributes {
-  id?: number;
+  id: number;
   title: string;
   description: string;
   time: number;
@@ -15,39 +15,29 @@ interface RecipeAttributes {
 
 export interface RecipeCreationAttributes extends Optional<RecipeAttributes, 'id'> {}
 
-class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> implements RecipeAttributes {
-  public id!: number;
-  public title!: string;
-  public description!: string;
-  public time!: number;
-  public difficulty!: string;
-  public category!: string;
-  public calories!: number;
-  public imgUrl!: string;
-  // public authorId!: number;
-}
+export interface RecipeInstance extends Model<RecipeAttributes, RecipeCreationAttributes>, RecipeAttributes {}
 
-Recipe.init({
+const Recipe = sequelize.define<RecipeInstance, RecipeAttributes>('Recipe', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true,
+    primaryKey: true
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: false
   },
   time: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false
   },
   difficulty: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   category: {
     type: DataTypes.STRING,
@@ -55,25 +45,16 @@ Recipe.init({
   },
   calories: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false
   },
   imgUrl: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   // authorId: {
   //   type: DataTypes.INTEGER,
-  //   references: {
-  //     model: 'Authors', // Nome da tabela de autores
-  //     key: 'id',
-  //   },
-  //   allowNull: false,
-  //   onUpdate: 'CASCADE',
-  //   onDelete: 'SET NULL',
-  // },
-}, {
-  sequelize,
-  modelName: 'Recipe',
-});
+  //   allowNull: false
+  // }
+})
 
-export default Recipe
+export { Recipe };
