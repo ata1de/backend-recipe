@@ -6,7 +6,7 @@ import { RecipeSchema } from './schema'
 
 const router = express.Router()
 
-router.post('/recipe/:id', validate(RecipeSchema.getById), recipeController.showById)
+router.get('/recipe/:id', validate(RecipeSchema.getById), recipeController.showById)
 router.get('/recipes/search/:name',validate(RecipeSchema.getByName),recipeController.showByName)
 router.get('/recipes/category/:category', validate(RecipeSchema.getByCategory), recipeController.showByCategory)
 router.get('/recipes/newest', recipeController.showTop5NewRecipes)

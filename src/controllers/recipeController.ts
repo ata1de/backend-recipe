@@ -3,12 +3,12 @@ import recipeService from "../services/recipeService"
 
 const recipeController = {
 
-    // GET /recipes/:id
+    // GET /recipe/:id
     showById: async(req: Request, res: Response) => { 
         const { id } = req.params
 
         try {
-            const recipe = await recipeService.getDetails(id)
+            const recipe = await recipeService.getDetails(Number(id))
 
             if (!recipe) {
                 return res.status(404).json({message: 'Recipe not find' })

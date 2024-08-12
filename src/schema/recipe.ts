@@ -24,7 +24,7 @@ const recipeSchema = {
     },
     getById: {
         params: yup.object().shape({
-            id: yup.string().required()
+            id: yup.number().required()
         })
     }
 }
