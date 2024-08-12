@@ -13,5 +13,9 @@ router.get('/recipes/newest', recipeController.showTop5NewRecipes)
 
 router.post('/recipes', validate(RecipeSchema.create), recipeController.create)
 
+router.put('/recipe/:id', validate(RecipeSchema.update), recipeController.update)
+
+router.delete('/recipe/:id', validate(RecipeSchema.delete), recipeController.delete)
+
 export { router }
 

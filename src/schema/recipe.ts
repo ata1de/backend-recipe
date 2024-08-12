@@ -26,6 +26,25 @@ const recipeSchema = {
         params: yup.object().shape({
             id: yup.number().required()
         })
+    },
+    update: {
+        params: yup.object().shape({
+            id: yup.number().required()
+        }),
+        body: yup.object().shape({
+            title: yup.string().required(),
+            description: yup.string().required(),
+            time: yup.number().required(),
+            difficulty: yup.string().required(),
+            category: yup.string().required(),
+            calories: yup.number().required(),
+            imgUrl: yup.string().url().required()
+        })
+    },
+    delete: {
+        params: yup.object().shape({
+            id: yup.number().required()
+        })
     }
 }
 
@@ -33,5 +52,7 @@ export default {
     getByName: recipeSchema.getByName,
     getByCategory: recipeSchema.getByCategory,
     getById: recipeSchema.getById,
-    create: recipeSchema.create
+    create: recipeSchema.create,
+    update: recipeSchema.update,
+    delete: recipeSchema.delete
 };

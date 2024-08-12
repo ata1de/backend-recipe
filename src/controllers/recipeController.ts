@@ -11,7 +11,7 @@ const recipeController = {
             const recipe = await recipeService.getDetails(Number(id))
 
             if (!recipe) {
-                return res.status(404).json({message: 'Recipe not find' })
+                return res.status(404).json({message: 'Recipe not found' })
             } 
 
             return res.status(200).json(recipe)
@@ -30,7 +30,7 @@ const recipeController = {
             const recipe = await recipeService.getByName(name)
 
             if (!recipe) {
-                return res.status(404).json({message: 'Recipe not find' })
+                return res.status(404).json({message: 'Recipe not found' })
             } 
 
             return res.status(200).json(recipe)
@@ -82,6 +82,44 @@ const recipeController = {
             }
         }
     },
+
+    // PUT/recipe/:id
+    update: async(req: Request, res: Response) => {
+        const { id } = req.params
+        const { title, description, time, difficulty, category, calories, imgUrl } = req.body
+
+        try {
+            const updatedRecipe = await recipeService.updateRecipe(Number(id), {
+                title,
+                description,
+                time,
+                difficulty,
+                category,
+                calories,
+                imgUrl
+            })
+
+            return res.status(200).json(updatedRecipe)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({message: error.message})
+            }
+        }
+    },
+
+    // DELETE/recipe/:id
+    delete: async(req: Request, res: Response) => {
+        const { id } = req.params
+
+        try {
+            await recipeService.deleteRecipe(Number(id))
+
+            return res.status(204).end()
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({message: error.message})
+            }
+    }},
 
     // GET /recipes/newest
     showTop5NewRecipes: async(req: Request, res: Response) => {
