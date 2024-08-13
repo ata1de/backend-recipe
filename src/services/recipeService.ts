@@ -38,8 +38,8 @@ const recipeService = {
         })
 
         return {
-            recipes: count,
-            totalRecipes: rows
+            totalRecipes: count,
+            recipes: rows
         }
     },
 
