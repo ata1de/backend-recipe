@@ -18,5 +18,11 @@ export const UserService = {
         });
 
         return user
+    },
+
+    findById: async (id: number) => {
+        const user = await User.findByPk(id)
+
+        return user
     }
 }

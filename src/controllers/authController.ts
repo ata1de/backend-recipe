@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { singToken } from '../http/authentication';
+import { jwtService } from '../http/authentication';
 import { UserService } from "../services/userService";
 
 export const AuthController = {
@@ -22,7 +22,7 @@ export const AuthController = {
                 return res.status(401).send({ error: 'Invalid password' });
             }
 
-            const token = singToken(userAlreadyExist.id.toLocaleString());
+            const token = jwtService.signToken(userAlreadyExist.id.toLocaleString(), '24h');
 
             res.cookie('token', token, {
                 httpOnly: true,

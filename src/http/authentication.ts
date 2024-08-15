@@ -1,8 +1,14 @@
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { config } from '../env'; // Importe o config do arquivo env.ts
 
-function singToken (token: string) {
-    return sign(token, 'my-secret-key' ,{ expiresIn: '1h' });
-}
+export const jwtService = {
+  signToken: (payload: string | object | Buffer, expiration: string) => {
+    return jwt.sign(payload, config.JWT_SECRET, {
+      expiresIn: expiration
+    });
+  },
 
-
-export { singToken };
+  verifyToken: (token: string, callbackfn: jwt.VerifyCallback) => {
+    jwt.verify(token, config.JWT_SECRET, callbackfn);
+  }
+};
