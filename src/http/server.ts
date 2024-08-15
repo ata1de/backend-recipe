@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import sequelize from '../database'
+import { config } from '../env'
 import { router } from './router'
 
 const app = express()
@@ -19,7 +20,7 @@ app.use(cors({
   credentials: true
 }));
 
-const PORT = process.env.port || 3333
+const PORT = config.PORT
 
 app.listen(PORT, () => {
   sequelize.authenticate().then(() => {

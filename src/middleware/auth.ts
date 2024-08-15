@@ -20,10 +20,10 @@ export function authenticateJwt (req: AuthenticateRequest, res: Response, next: 
           return res.status(401).json({ message: 'Access Denied: Unauthorized token' })
         }
     
-    // truque do typescript para tipar o decoded
-    UserService.findById((decoded as JwtPayload).id).then(user => {
-        req.user = user
-        next()
-    })
+        // truque do typescript para tipar o decoded
+        UserService.findById((decoded as JwtPayload).id).then(user => {
+            req.user = user
+            next()
+        })
     })
 }

@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
+import { CredentialsInvalid } from '../errors/CredentialsInvalid';
 import { jwtService } from '../http/authentication';
 import { UserService } from "../services/userService";
 
@@ -10,26 +11,25 @@ export const AuthController = {
 
         try {
             
-            const userAlreadyExist = await UserService.findByEmail(email);
+            const user = await UserService.findByEmail(email);
 
-            if (!userAlreadyExist) {
-                return res.status(404).send({ error: 'User not found' });
+            if (!user) {
+                throw new CredentialsInvalid()
             }
 
-            const isPasswordValid = await bcrypt.compare(password, userAlreadyExist.password);
+            const isPasswordValid = await bcrypt.compare(password, user.password);
 
             if (!isPasswordValid) {
-                return res.status(401).send({ error: 'Invalid password' });
+                throw new CredentialsInvalid()
             }
 
-            const token = jwtService.signToken(userAlreadyExist.id.toLocaleString(), '24h');
+            const token = jwtService.signToken(user.id.toLocaleString(), '24h');
 
-            res.cookie('token', token, {
+            return res.status(200).cookie('token', token, {
                 httpOnly: true,
                 maxAge: 60 * 60 * 24 * 1000,  // 1 dia
                 path: '/'
-            });
-            return res.status(200).send({ message: 'User authenticated' });
+            }).send({ message: 'User authenticated' });
 
         } catch (error) {
             console.error(error);
