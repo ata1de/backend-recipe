@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
+import { singToken } from '../http/authentication';
 import { UserService } from "../services/userService";
 
 export const AuthController = {
@@ -21,6 +22,13 @@ export const AuthController = {
                 return res.status(401).send({ error: 'Invalid password' });
             }
 
+            const token = singToken(userAlreadyExist.id.toLocaleString());
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                maxAge: 60 * 60 * 24 * 1000,  // 1 dia
+                path: '/'
+            });
             return res.status(200).send({ message: 'User authenticated' });
 
         } catch (error) {
@@ -54,5 +62,11 @@ export const AuthController = {
             console.error(error);
             return res.status(500).send(error);
         }
+    },
+
+    // POST /auth/logout
+    logOut: async (req: Request, res: Response) => {
+        res.clearCookie('token');
+        return res.status(200).send({ message: 'User logged out' });
     }
 }
