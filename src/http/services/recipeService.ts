@@ -1,6 +1,7 @@
 import { Op } from "sequelize"
 import { RecipeNotFound } from "../../errors/notFound"
-import { Recipe, RecipeCreationAttributes } from "../../models/Recipe"
+import { RecipeCreationAttributes } from "../../models/Recipe"
+import { Recipe } from "../../models/index"
 
 const recipeService = {
     getDetails: async(id: number) => {
@@ -54,7 +55,9 @@ const recipeService = {
             throw new RecipeNotFound()
         }
 
-        return await recipe.update(recipeProp)
+        return await recipe.update({
+            ...recipeProp
+        });
     },
 
     deleteRecipe: async(id: number) => {
@@ -72,6 +75,8 @@ const recipeService = {
             limit: 5,
             order: [['createdAt', 'DESC']]
         })
+
+        console.log(NewestRecipes)
 
         return {
             newest: NewestRecipes
