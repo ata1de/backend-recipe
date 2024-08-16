@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { CredentialsInvalid } from '../errors/CredentialsInvalid';
-import { jwtService } from '../http/authentication';
+import { CredentialsInvalid } from '../../errors/CredentialsInvalid';
+import { jwtService } from '../services/authentication';
 import { UserService } from "../services/userService";
 
 export const AuthController = {
@@ -18,22 +18,26 @@ export const AuthController = {
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
+            console.log(isPasswordValid)
 
             if (!isPasswordValid) {
                 throw new CredentialsInvalid()
             }
 
-            const token = jwtService.signToken(user.id.toLocaleString(), '24h');
+            const token = jwtService.signToken(user.id.toString(), '86400');
 
-            return res.status(200).cookie('token', token, {
+            res.cookie('token', token, {
                 httpOnly: true,
                 maxAge: 60 * 60 * 24 * 1000,  // 1 dia
                 path: '/'
-            }).send({ message: 'User authenticated' });
+            });
+
+            return res.status(200).send({ message: 'User authenticated' });
 
         } catch (error) {
-            console.error(error);
-            return res.status(500).send(error);
+            if (error instanceof CredentialsInvalid) {
+                return res.status(401).send({ message: error.message });
+            }
         }
     },
 
@@ -45,7 +49,7 @@ export const AuthController = {
             const userAlreadyExist = await UserService.findByEmail(email);
 
             if (userAlreadyExist) {
-                return res.status(400).send({ error: 'User already exist' });
+                return res.status(409).send({ error: 'User already exist' });
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);

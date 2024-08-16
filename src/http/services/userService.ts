@@ -1,5 +1,5 @@
-import { UserCreationAttributes } from "../models/User";
-import { User } from '../models/index';
+import { UserCreationAttributes } from "../../models/User";
+import { User } from '../../models/index';
 
 export const UserService = {
     createUser: async (data: UserCreationAttributes) => {

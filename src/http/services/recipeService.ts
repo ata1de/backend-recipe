@@ -1,6 +1,6 @@
 import { Op } from "sequelize"
-import { RecipeNotFound } from "../errors/notFound"
-import { Recipe, RecipeCreationAttributes } from "../models/Recipe"
+import { RecipeNotFound } from "../../errors/notFound"
+import { Recipe, RecipeCreationAttributes } from "../../models/Recipe"
 
 const recipeService = {
     getDetails: async(id: number) => {
