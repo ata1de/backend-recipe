@@ -1,4 +1,6 @@
+import AuthSchema from './auth';
 import RecipeSchema from './recipe';
 
 
-export { RecipeSchema };
+export { AuthSchema, RecipeSchema };
+

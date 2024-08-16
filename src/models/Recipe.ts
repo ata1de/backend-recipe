@@ -10,7 +10,7 @@ interface RecipeAttributes {
   category: string;
   calories: number;
   imgUrl: string;
-  // authorId: number;
+  authorId: number;
 }
 
 export interface RecipeCreationAttributes extends Optional<RecipeAttributes, 'id'> {}
@@ -51,10 +51,15 @@ const Recipe = sequelize.define<RecipeInstance, RecipeAttributes>('Recipe', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  // authorId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false
-  // }
+  authorId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'User',
+      key: 'id'
+    }
+  }
 })
 
 export { Recipe };
+

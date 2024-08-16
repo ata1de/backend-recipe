@@ -62,7 +62,7 @@ const recipeController = {
 
     // POST /recipes
     create: async(req: Request, res: Response) => {
-        const {title, description, time,difficulty ,category, calories, imgUrl } = req.body
+        const {title, description, time,difficulty ,category, calories, imgUrl,authorId } = req.body
 
         try {
             const newRecipe = await recipeService.createRecipe({
@@ -72,7 +72,8 @@ const recipeController = {
                 difficulty,
                 category,
                 calories,
-                imgUrl
+                imgUrl,
+                authorId
             })
 
             return res.status(201).json(newRecipe)
@@ -86,7 +87,7 @@ const recipeController = {
     // PUT/recipe/:id
     update: async(req: Request, res: Response) => {
         const { id } = req.params
-        const { title, description, time, difficulty, category, calories, imgUrl } = req.body
+        const { title, description, time, difficulty, category, calories, imgUrl,authorId } = req.body
 
         try {
             const updatedRecipe = await recipeService.updateRecipe(Number(id), {
@@ -96,7 +97,8 @@ const recipeController = {
                 difficulty,
                 category,
                 calories,
-                imgUrl
+                imgUrl,
+                authorId
             })
 
             return res.status(200).json(updatedRecipe)
