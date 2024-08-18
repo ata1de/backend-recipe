@@ -75,9 +75,7 @@ const recipeService = {
             limit: 5,
             order: [['createdAt', 'DESC']]
         })
-
-        console.log(NewestRecipes)
-
+        
         return {
             newest: NewestRecipes
         }

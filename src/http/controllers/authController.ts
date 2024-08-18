@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { CredentialsInvalid } from '../../errors/CredentialsInvalid';
-import { jwtService } from '../services/authentication';
+import { jwtService } from '../services/JwtService';
 import { UserService } from "../services/userService";
 
 export const AuthController = {
@@ -32,7 +32,7 @@ export const AuthController = {
                 path: '/'
             });
 
-            return res.status(200).send({ message: 'User authenticated' });
+            return res.status(200).json({ user: user});
 
         } catch (error) {
             if (error instanceof CredentialsInvalid) {
@@ -72,5 +72,27 @@ export const AuthController = {
     logOut: async (req: Request, res: Response) => {
         res.clearCookie('token');
         return res.status(200).send({ message: 'User logged out' });
+    },
+
+    //GET /auth/check
+    check: async(req: Request, res: Response) => {
+        const token = req.cookies['token'];
+
+        if (!token) {
+            console.log('token undefined', token)
+            return res.status(200).json({ isAuthenticated: false });
+        }
+
+        try {
+            jwtService.verifyToken(token, (err, decoded) => {
+                if (err || typeof decoded === 'undefined') {
+                  return res.json({ isAuthenticated: false })
+                }
+                
+                return res.status(200).json({ isAuthenticated: true, user: decoded });
+            });
+        } catch (error) {
+            return res.status(401).json({ isAuthenticated: false });
+        }
     }
 }

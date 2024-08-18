@@ -14,6 +14,9 @@ export const UserService = {
         const user = await User.findOne({
             where: {
                 email
+            },
+            include: {
+                association: 'recipes'
             }
         });
 
@@ -24,5 +27,13 @@ export const UserService = {
         const user = await User.findByPk(id)
 
         return user
+    },
+
+    updateUser: async (id: number, data: UserCreationAttributes) => {
+        return await User.update(data, {
+            where: {
+                id
+            }
+        })
     }
 }
