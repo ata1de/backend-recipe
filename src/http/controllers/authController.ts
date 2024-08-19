@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { CredentialsInvalid } from '../../errors/CredentialsInvalid';
+import { CredentialsInvalid } from '../../errors/credentialsInvalid';
 import { jwtService } from '../services/JwtService';
 import { UserService } from "../services/userService";
 
@@ -88,6 +88,8 @@ export const AuthController = {
                 if (err || typeof decoded === 'undefined') {
                   return res.json({ isAuthenticated: false })
                 }
+
+                console.log(token)
                 
                 return res.status(200).json({ isAuthenticated: true, user: decoded });
             });

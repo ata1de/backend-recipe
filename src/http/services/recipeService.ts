@@ -1,5 +1,5 @@
 import { Op } from "sequelize"
-import { RecipeNotFound } from "../../errors/notFound"
+import { RecipeNotFound } from "../../errors/recipeNotFound"
 import { RecipeCreationAttributes } from "../../models/Recipe"
 import { Recipe } from "../../models/index"
 

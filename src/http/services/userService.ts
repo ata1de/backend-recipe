@@ -24,7 +24,11 @@ export const UserService = {
     },
 
     findById: async (id: number) => {
-        const user = await User.findByPk(id)
+        const user = await User.findByPk(id, {
+            include: {
+                association: 'recipes'
+            }
+        })
 
         return user
     },
