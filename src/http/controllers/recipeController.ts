@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import { RecipeNotFound } from "../../errors/recipeNotFound"
 import recipeService from "../services/recipeService"
 
 const recipeController = {
@@ -11,13 +12,13 @@ const recipeController = {
             const recipe = await recipeService.getDetails(Number(id))
 
             if (!recipe) {
-                return res.status(404).json({message: 'Recipe not found' })
+                throw new RecipeNotFound()
             } 
 
             return res.status(200).json(recipe)
         } catch (error) {
-            if (error instanceof Error) {
-                res.status(400).json({message: error.message})
+            if (error instanceof RecipeNotFound) {
+                return res.status(404).json({message: error.message })
             }
         }
     },
@@ -30,13 +31,13 @@ const recipeController = {
             const recipe = await recipeService.getByName(name)
 
             if (!recipe) {
-                return res.status(404).json({message: 'Recipe not found' })
+                throw new RecipeNotFound()
             } 
 
             return res.status(200).json(recipe)
         } catch (error) {
-            if (error instanceof Error) {
-                res.status(400).json({message: error.message})
+            if (error instanceof RecipeNotFound) {
+                return res.status(404).json({message: error.message })
             }
         }
     },
@@ -49,13 +50,13 @@ const recipeController = {
             const recipe = await recipeService.getByCategory(category)
 
             if (!recipe) {
-                return res.status(404).json({message: 'Recipe not find' })
+                throw new RecipeNotFound()
             } 
 
             return res.status(200).json(recipe)
         } catch (error) {
-            if (error instanceof Error) {
-                res.status(400).json({message: error.message})
+            if (error instanceof RecipeNotFound) {
+                return res.status(404).json({message: error.message })
             }
         }
     },

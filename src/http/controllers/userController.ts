@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
+import { UserNotFound } from '../../errors/userNotFound';
 import { UserService } from "../services/userService";
 
 export const UserController = {
@@ -11,7 +12,7 @@ export const UserController = {
             const user = await UserService.findById(Number(id));
 
             if (!user) {
-                return res.status(404).send({ message: 'User not found' });
+                throw new UserNotFound()
             }
 
             const hashedPassword = await bcrypt.hash(password, 10)
@@ -20,7 +21,9 @@ export const UserController = {
 
             return res.status(200).send({ user: newUser });
         } catch (error) {
-            return res.status(500).send({ message: 'Internal server error' });
+            if (error instanceof UserNotFound) {
+                return res.status(404).json({message: error.message })
+            }
         }
     },
 
@@ -31,12 +34,14 @@ export const UserController = {
             const user = await UserService.findById(Number(id));
 
             if (!user) {
-                return res.status(404).send({ message: 'User not found' });
+                throw new UserNotFound()
             }
 
             return res.status(200).send({ user });
         } catch (error) {
-            return res.status(500).send({ message: 'Internal server error' });
+            if (error instanceof UserNotFound) {
+                return res.status(404).json({message: error.message })
+            }
         }
     }
 }

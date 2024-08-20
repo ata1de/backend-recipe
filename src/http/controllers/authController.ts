@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { CredentialsInvalid } from '../../errors/credentialsInvalid';
+import { UserAlreadyExists } from '../../errors/userAlreadyExists';
 import { jwtService } from '../services/JwtService';
 import { UserService } from "../services/userService";
 
@@ -18,7 +19,6 @@ export const AuthController = {
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
-            console.log(isPasswordValid)
 
             if (!isPasswordValid) {
                 throw new CredentialsInvalid()
@@ -49,7 +49,7 @@ export const AuthController = {
             const userAlreadyExist = await UserService.findByEmail(email);
 
             if (userAlreadyExist) {
-                return res.status(409).send({ error: 'User already exist' });
+                throw new UserAlreadyExists()
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,8 +63,9 @@ export const AuthController = {
             return res.status(201).send(user);
 
         } catch (error) {
-            console.error(error);
-            return res.status(500).send(error);
+            if (error instanceof UserAlreadyExists) {
+                return res.status(409).send({ message: error.message });
+            }
         }
     },
 
@@ -79,7 +80,6 @@ export const AuthController = {
         const token = req.cookies['token'];
 
         if (!token) {
-            console.log('token undefined', token)
             return res.status(200).json({ isAuthenticated: false });
         }
 
